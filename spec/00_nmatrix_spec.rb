@@ -28,6 +28,8 @@
 
 require File.dirname(__FILE__) + "/spec_helper.rb"
 
+require 'byebug'
+
 describe NMatrix do
   #after :each do
   #  GC.start
@@ -147,6 +149,34 @@ describe NMatrix do
     expect(m[3,0]).to eq(5.0)
     expect(m[3,1]).to eq(2.0)
     expect(m[3,2]).to eq(3.0)
+  end
+
+  #TODO: This is handle the inject method correctly
+  it "handles inject correctly" do
+    b_matrix = NMatrix.new([4, 3], [1, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 8])
+
+    a_matrix = NMatrix.new([4, 3], stype: :yale, default: 0)
+    a_matrix[0,0] = 1
+    a_matrix[1,1] = 2
+    a_matrix[2,2] = 4
+    a_matrix[3,2] = 8
+
+
+    b_column = []
+    a_column = []
+
+    b_matrix.cols.times do |x|
+      byebug
+      b_column << b_matrix.col(x).inject(:+)
+    end
+
+    a_matrix.cols.times do |x|
+      byebug
+      a_column << a_matrix.col(x).inject(:+)
+    end
+
+    expect(b_column).to eq([1, 2, 12])
+    expect(a_column).to eq([1, 2, 12])
   end
 
   it "dense handles missing initialization value" do

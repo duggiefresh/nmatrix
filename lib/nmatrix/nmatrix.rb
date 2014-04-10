@@ -355,6 +355,7 @@ class NMatrix
 
     params = Array.new(self.dim)
     params.each.with_index do |v,d|
+      byebug
       params[d] = d == shape_idx ? rank_idx : 0...self.shape[d]
     end
 
